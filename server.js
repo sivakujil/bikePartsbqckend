@@ -31,6 +31,7 @@ import { handleRiderConnection, handleAdminConnection } from "./src/controllers/
 dotenv.config();
 connectDB();
 
+const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
@@ -60,7 +61,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-const app = express();
+
 
 
 
