@@ -226,6 +226,9 @@ app.use(
   })
 );
 
+import path from "path";
+console.log("Current directory:", path.resolve());
+
 // ---------------------------
 // Body Parsing
 // ---------------------------
