@@ -56,6 +56,7 @@ app.use(helmet({
 // CORS
 app.use(cors({
   origin: process.env.CLIENT_URL || "https://bike-parts-frontend.vercel.app",
+   methods: ["GET", "POST","put","delete"],
   credentials: true
 }));
 
