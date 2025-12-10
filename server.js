@@ -35,8 +35,8 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    methods: ["GET", "POST"],
+    origin: process.env.CLIENT_URL || "https://bike-parts-frontend.vercel.app",
+    methods: ["GET", "POST","put","delete"],
     credentials: true
   }
 });
@@ -55,7 +55,7 @@ app.use(helmet({
 
 // CORS
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5173",
+  origin: process.env.CLIENT_URL || "https://bike-parts-frontend.vercel.app",
   credentials: true
 }));
 
