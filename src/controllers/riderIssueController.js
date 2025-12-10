@@ -1,4 +1,4 @@
-import Issue from '../Models/Issue.js';
+import Issue from '../Models/issue.js';
 import RiderOrder from '../Models/RiderOrder.js';
 import { body, validationResult } from 'express-validator';
 import logger from '../Utils/logger.js';
