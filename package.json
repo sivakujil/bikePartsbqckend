@@ -1,11 +1,11 @@
 {
   "name": "final-project-back-end",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "nodemon src/server.js",
+    "start": "node src/server.js",
     "seed": "node src/seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
