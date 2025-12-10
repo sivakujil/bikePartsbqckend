@@ -3468,3 +3468,4 @@
 {"timestamp":"2025-12-10 10:49:44","level":"info","message":"Incoming request","method":"GET","url":"/api/products?sort=newest&page=1&limit=12","ip":"127.0.0.1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"}
 {"timestamp":"2025-12-10 10:49:45","level":"info","message":"Incoming request","method":"GET","url":"/api/products?sort=newest&page=1&limit=12","ip":"127.0.0.1","userAgent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"}
 {"timestamp":"2025-12-10 11:17:21","level":"info","message":"Server started","port":"5000","environment":"development","apiUrl":"http://localhost:5000/api"}
+{"timestamp":"2025-12-10 11:52:59","level":"info","message":"Server started successfully","port":"5000","environment":"development","apiUrl":"http://localhost:5000/api"}
