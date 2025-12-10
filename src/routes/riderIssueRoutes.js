@@ -7,7 +7,7 @@ import {
   updateIssue,
   validateIssueReport,
   validateIssueUpdate
-} from '../controllers/riderIssueController.js';
+} from '../controllers/riderissueController.js';
 
 const router = express.Router();
 
