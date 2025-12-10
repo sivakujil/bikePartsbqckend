@@ -31,7 +31,6 @@ import { handleRiderConnection, handleAdminConnection } from "./src/controllers/
 dotenv.config();
 connectDB();
 
-const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
@@ -57,8 +56,14 @@ app.use(helmet({
 app.use(cors({
   origin: process.env.CLIENT_URL || "https://bike-parts-frontend.vercel.app",
    methods: ["GET", "POST","put","delete"],
-  credentials: true
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+const app = express();
+
+
+
 
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
