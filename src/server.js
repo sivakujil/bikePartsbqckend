@@ -12,7 +12,7 @@ import riderOrderRoutes from "./routes/riderOrderRoutes.js";
 import riderCODRoutes from "./routes/riderCODRoutes.js";
 import riderPayoutRoutes from "./routes/riderPayoutRoutes.js";
 import riderLocationRoutes from "./routes/riderLocationRoutes.js";
-import riderIssueRoutes from "./routes/riderIssueRoutes.js";
+import riderIssueRoutes from "./routes/riderissueRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
