@@ -12,7 +12,7 @@ import riderOrderRoutes from "./src/routes/riderOrderRoutes.js";
 import riderCODRoutes from "./src/routes/riderCODRoutes.js";
 import riderPayoutRoutes from "./src/routes/riderPayoutRoutes.js";
 import riderLocationRoutes from "./src/routes/riderLocationRoutes.js";
-import riderIssueRoutes from "./src/routes/riderissueRoutes.js";
+//import riderIssueRoutes from "./src/routes/riderissueRoutes.js"
 import productRoutes from "./src/routes/productRoutes.js";
 import cartRoutes from "./src/routes/cartRoutes.js";
 import orderRoutes from "./src/routes/orderRoutes.js";
@@ -87,7 +87,7 @@ app.use("/api/rider", riderOrderRoutes);
 app.use("/api/rider", riderCODRoutes);
 app.use("/api/rider", riderPayoutRoutes);
 app.use("/api/rider", riderLocationRoutes);
-app.use("/api/rider", riderIssueRoutes);
+//app.use("/api/rider", riderIssueRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart-order", cartOrderRoutes);
 app.use("/api/cart", cartRoutes);
