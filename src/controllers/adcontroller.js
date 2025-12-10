@@ -1,4 +1,4 @@
-import Ad from "../models/Ad.js";
+import Ad from "../Models/Ad.js";
 
 // GET ALL ADS
 export const getAds = async (req, res) => {
