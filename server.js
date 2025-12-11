@@ -36,7 +36,7 @@ const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin:"https://bike-parts-frontend.vercel.app",
-    methods: ["GET", "POST","put","delete"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
   }
 });
@@ -56,15 +56,19 @@ app.use(helmet({
 // CORS
 app.use(cors({
   origin:"https://bike-parts-frontend.vercel.app",
-   methods: ["GET", "POST","put","delete"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-
-
-
-
+// Handle preflight OPTIONS requests explicitly
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', 'https://bike-parts-frontend.vercel.app');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200);
+});
 
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
