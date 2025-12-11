@@ -35,7 +35,7 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "https://bike-parts-frontend.vercel.app",
+    origin:"https://bike-parts-frontend.vercel.app",
     methods: ["GET", "POST","put","delete"],
     credentials: true
   }
