@@ -293,7 +293,7 @@ export const getProductById = async (req, res) => {
 // ======================================
 export const createProduct = async (req, res) => {
   try {
-    const { name, sku, category, brand, model, price, cost, quantity, description, image, images } = req.body;
+    const { name, sku, category, brand, model, price, discountPrice, discountPercentage, cost, quantity, description, image, images } = req.body;
 
     // Validation
     if (!name || !category || !brand || !price || !cost || !quantity) {
@@ -319,6 +319,8 @@ export const createProduct = async (req, res) => {
       brand: brand.trim(),
       model: model ? model.trim() : undefined,
       price: parseFloat(price),
+      discountPrice: discountPrice ? parseFloat(discountPrice) : undefined,
+      discountPercentage: discountPercentage ? parseFloat(discountPercentage) : undefined,
       cost: parseFloat(cost),
       quantity: parseInt(quantity),
       description: description ? description.trim() : undefined,
@@ -349,7 +351,7 @@ export const createProduct = async (req, res) => {
 // ======================================
 export const updateProduct = async (req, res) => {
   try {
-    const { name, category, brand, model, price, cost, quantity, description, image, images } = req.body;
+    const { name, category, brand, model, price, discountPrice, discountPercentage, cost, quantity, description, image, images } = req.body;
 
     // Validation
     if (name && name.trim() === '') {
@@ -369,6 +371,8 @@ export const updateProduct = async (req, res) => {
     if (brand !== undefined) updateData.brand = brand.trim();
     if (model !== undefined) updateData.model = model ? model.trim() : undefined;
     if (price !== undefined) updateData.price = parseFloat(price);
+    if (discountPrice !== undefined) updateData.discountPrice = discountPrice ? parseFloat(discountPrice) : undefined;
+    if (discountPercentage !== undefined) updateData.discountPercentage = discountPercentage ? parseFloat(discountPercentage) : undefined;
     if (cost !== undefined) updateData.cost = parseFloat(cost);
     if (quantity !== undefined) updateData.quantity = parseInt(quantity);
     if (description !== undefined) updateData.description = description ? description.trim() : undefined;

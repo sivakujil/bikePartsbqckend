@@ -8,6 +8,8 @@ const productSchema = new mongoose.Schema(
     brand: { type: String, required: true },
     model: { type: String },
     price: { type: Number, required: true },
+    discountPrice: { type: Number }, // Optional discounted price
+    discountPercentage: { type: Number, min: 0, max: 100 }, // Optional discount percentage
     cost: { type: Number, required: true },
     quantity: { type: Number, required: true, default: 0 },
     stock: { type: Number, default: 0 }, // Keep for backward compatibility
