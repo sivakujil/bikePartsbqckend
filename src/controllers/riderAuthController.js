@@ -40,7 +40,7 @@ export const validateRegister = [
 ];
 
 export const validateLogin = [
-  body('phone').isMobilePhone().withMessage('Valid phone number required'),
+  body('phone').matches(/^\+?[0-9]{10,15}$/).withMessage('Valid phone number required'),
   body('password').exists().withMessage('Password is required')
 ];
 
