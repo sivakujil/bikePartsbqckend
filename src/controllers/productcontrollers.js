@@ -227,10 +227,10 @@ export const getProducts = async (req, res) => {
     // Sorting
     let sortOption = {};
     switch (req.query.sort) {
-      case "price-low":
+      case "price_asc":
         sortOption = { price: 1 };
         break;
-      case "price-high":
+      case "price_desc":
         sortOption = { price: -1 };
         break;
       case "rating":

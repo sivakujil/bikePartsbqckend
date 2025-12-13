@@ -1,9 +1,19 @@
 import User from "../Models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
 dotenv.config();
+
+// Create email transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
 // ---------------- HELPER ----------------
 const getJwtSecret = () => {
@@ -243,6 +253,7 @@ export const updateProfile = async (req, res) => {
         id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
+        
         phone: updatedUser.phone,
         role: updatedUser.role,
         createdAt: updatedUser.createdAt
