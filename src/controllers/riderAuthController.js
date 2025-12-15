@@ -77,13 +77,13 @@ export const register = async (req, res) => {
 
     // Generate tokens
     const accessToken = jwt.sign(
-      { riderId: rider._id },
+      { riderId: rider._id, role: 'rider' },
       process.env.JWT_SECRET,
       { expiresIn: '15m' }
     );
 
     const refreshToken = jwt.sign(
-      { riderId: rider._id },
+      { riderId: rider._id, role: 'rider' },
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: '7d' }
     );
@@ -135,13 +135,13 @@ export const login = async (req, res) => {
 
     // Generate tokens
     const accessToken = jwt.sign(
-      { riderId: rider._id },
+      { riderId: rider._id, role: 'rider' },
       process.env.JWT_SECRET,
       { expiresIn: '15m' }
     );
 
     const refreshToken = jwt.sign(
-      { riderId: rider._id },
+      { riderId: rider._id, role: 'rider' },
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: '7d' }
     );
@@ -184,7 +184,7 @@ export const refresh = async (req, res) => {
 
     // Generate new access token
     const accessToken = jwt.sign(
-      { riderId: rider._id },
+      { riderId: rider._id, role: 'rider' },
       process.env.JWT_SECRET,
       { expiresIn: '15m' }
     );

@@ -35,6 +35,12 @@ export const authenticateRider = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Check role
+    if (decoded.role !== 'rider') {
+      return res.status(403).json({ message: 'Access denied. Invalid role.' });
+    }
+
     const rider = await Rider.findById(decoded.riderId);
 
     if (!rider || !rider.isActive) {

@@ -18,6 +18,11 @@ export const protectRider = async (req, res, next) => {
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    // Check role
+    if (decoded.role !== 'rider') {
+      return res.status(403).json({ message: 'Access denied. Invalid role.' });
+    }
+
     // Find rider
     req.rider = await Rider.findById(decoded.riderId).select('-passwordHash -otp');
 
