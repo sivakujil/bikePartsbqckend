@@ -40,8 +40,8 @@ export const createPayment = async (req, res) => {
       payment_method_types: ["card"],
       mode: "payment",
       line_items: lineItems,
-      success_url: (process.env.STRIPE_SUCCESS_URL || "http://localhost:5173/checkout-success") + "/{CHECKOUT_SESSION_ID}",
-      cancel_url: process.env.STRIPE_CANCEL_URL || "http://localhost:5173/checkout-cancel",
+      success_url: (process.env.STRIPE_SUCCESS_URL || "https://bike-parts-frontend.vercel.app/checkout-success") + "/{CHECKOUT_SESSION_ID}",
+      cancel_url: process.env.STRIPE_CANCEL_URL || "https://bike-parts-frontend.vercel.app/checkout-cancel",
       metadata: {
         orderId: orderId || '',
         userId: req.user._id.toString()
