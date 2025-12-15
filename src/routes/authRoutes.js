@@ -5,7 +5,8 @@ import {
   forgotPassword,
   resetPassword,
   updateProfile,
-  createAdmin // ✅ Make sure this is exported from authcontrollers.js
+  createAdmin,
+  refreshToken // ✅ Add refresh token function
 } from "../controllers/authcontrollers.js";
 import { protect, authorizeAdmin } from "../middlewares/authmiddleware.js";
 
@@ -17,6 +18,7 @@ router.post("/login", login);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 router.post("/create-admin", createAdmin);
+router.post("/refresh", refreshToken);
 
 // Protected routes
 router.get("/profile", protect, (req, res) => res.json(req.user));

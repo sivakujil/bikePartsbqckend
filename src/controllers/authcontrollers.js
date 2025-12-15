@@ -58,15 +58,22 @@ export const register = async (req, res) => {
 
     const newUser = await User.create({ name: trimmedName, email: normalizedEmail, passwordHash });
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       { id: newUser._id, role: newUser.role || "user" },
       getJwtSecret(),
+      { expiresIn: "15m" }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: newUser._id },
+      process.env.JWT_REFRESH_SECRET || getJwtSecret(),
       { expiresIn: "7d" }
     );
 
     res.status(201).json({
       user: { id: newUser._id, name: trimmedName, email, role: newUser.role || "user" },
-      token,
+      accessToken,
+      refreshToken,
     });
   } catch (err) {
     console.error("Register error:", err);
@@ -105,16 +112,23 @@ export const login = async (req, res) => {
 
     console.log("Password match successful for user:", normalizedEmail);
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       { id: user._id, role: user.role || "user" },
       getJwtSecret(),
+      { expiresIn: "15m" }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: user._id },
+      process.env.JWT_REFRESH_SECRET || getJwtSecret(),
       { expiresIn: "7d" }
     );
 
     console.log("Login successful for user:", normalizedEmail);
 
     res.json({
-      token,
+      accessToken,
+      refreshToken,
       user: {
         id: user._id,
         name: user.name,
@@ -215,6 +229,38 @@ export const createAdmin = async (req, res) => {
   } catch (err) {
     console.error("Create admin error:", err);
     res.status(500).json({ message: "Server error creating admin" });
+  }
+};
+
+// ---------------- REFRESH TOKEN ----------------
+export const refreshToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: "Refresh token required" });
+    }
+
+    // Verify refresh token
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET || getJwtSecret());
+
+    // Find user
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "Invalid refresh token" });
+    }
+
+    // Generate new access token
+    const accessToken = jwt.sign(
+      { id: user._id, role: user.role || "user" },
+      getJwtSecret(),
+      { expiresIn: "15m" }
+    );
+
+    res.json({ accessToken });
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    res.status(401).json({ message: "Invalid refresh token" });
   }
 };
 
