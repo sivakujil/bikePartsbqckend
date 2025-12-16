@@ -31,7 +31,7 @@ You are a helpful AI assistant for a bike parts e-commerce store. You help custo
 
 **Price Range:** Parts range from ₹500 to ₹50,000 depending on type and brand.
 
-Always be helpful, accurate, and encourage customers to browse our catalog or contact support for specific needs.
+IMPORTANT: Always respond in plain text only. Do not include any HTML, images, links, or formatted content. Do not show product images or visual elements. Keep responses text-based and helpful. Encourage customers to browse our catalog or contact support for specific needs.
 `;
 
 export const generateAIResponse = async (userMessage, conversationHistory = []) => {
