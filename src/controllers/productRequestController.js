@@ -3,19 +3,19 @@ import ProductRequest from "../Models/ProductRequest.js";
 // Create a new product request
 export const createProductRequest = async (req, res) => {
   try {
-    const { productName, description, userId } = req.body;
+    const { productName, message, userId } = req.body;
 
     // Validate required fields
-    if (!productName || !description) {
+    if (!productName || !message) {
       return res.status(400).json({
-        message: "Product name and description are required"
+        message: "Product name and message are required"
       });
     }
 
     // Create the request
     const productRequest = await ProductRequest.create({
       productName: productName.trim(),
-      description: description.trim(),
+      message: message.trim(),
       userId: userId || null, // Optional user ID
     });
 
@@ -72,6 +72,23 @@ export const getAllProductRequests = async (req, res) => {
   }
 };
 
+// Get product requests for the logged-in user
+export const getUserProductRequests = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming req.user is set by auth middleware
+
+    const requests = await ProductRequest.find({ userId })
+      .sort({ createdAt: -1 });
+
+    res.json({
+      requests
+    });
+  } catch (err) {
+    console.error("Error fetching user product requests:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // Update product request status (for admin)
 export const updateProductRequestStatus = async (req, res) => {
   try {
@@ -79,10 +96,10 @@ export const updateProductRequestStatus = async (req, res) => {
     const { id } = req.params;
 
     // Validate status
-    const validStatuses = ["pending", "reviewed", "fulfilled"];
+    const validStatuses = ["pending", "approved", "rejected"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({
-        message: "Invalid status. Must be one of: pending, reviewed, fulfilled"
+        message: "Invalid status. Must be one of: pending, approved, rejected"
       });
     }
 
@@ -102,6 +119,51 @@ export const updateProductRequestStatus = async (req, res) => {
     });
   } catch (err) {
     console.error("Error updating product request status:", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Reply to product request (for admin)
+export const replyToProductRequest = async (req, res) => {
+  try {
+    const { status, replyMessage } = req.body;
+    const { id } = req.params;
+
+    // Validate status
+    const validStatuses = ["pending", "approved", "rejected"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        message: "Invalid status. Must be one of: pending, approved, rejected"
+      });
+    }
+
+    // Validate replyMessage
+    if (!replyMessage || replyMessage.trim().length === 0) {
+      return res.status(400).json({
+        message: "Reply message is required"
+      });
+    }
+
+    const request = await ProductRequest.findByIdAndUpdate(
+      id,
+      {
+        status,
+        replyMessage: replyMessage.trim(),
+        repliedAt: new Date()
+      },
+      { new: true }
+    ).populate('userId', 'name email');
+
+    if (!request) {
+      return res.status(404).json({ message: "Product request not found" });
+    }
+
+    res.json({
+      message: "Product request replied successfully",
+      request
+    });
+  } catch (err) {
+    console.error("Error replying to product request:", err);
     res.status(500).json({ message: err.message });
   }
 };

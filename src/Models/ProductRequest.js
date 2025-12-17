@@ -7,9 +7,13 @@ const productRequestSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    description: {
+    message: {
       type: String,
       required: true,
+      trim: true,
+    },
+    replyMessage: {
+      type: String,
       trim: true,
     },
     userId: {
@@ -19,8 +23,11 @@ const productRequestSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "reviewed", "fulfilled"],
+      enum: ["pending", "approved", "rejected"],
       default: "pending",
+    },
+    repliedAt: {
+      type: Date,
     },
   },
   { timestamps: true }
