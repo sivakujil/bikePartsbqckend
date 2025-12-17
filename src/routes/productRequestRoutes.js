@@ -3,24 +3,18 @@ import {
   createProductRequest,
   getAllProductRequests,
   getUserProductRequests,
-  updateProductRequestStatus,
-  replyToProductRequest,
-  deleteProductRequest
+  replyToProductRequest
 } from "../controllers/productRequestController.js";
 import { protect, authorizeAdmin } from "../middlewares/authmiddleware.js";
 
 const router = express.Router();
 
-// Public route - anyone can submit a product request
-router.post("/", createProductRequest);
-
 // User routes
-router.get("/my", protect, getUserProductRequests);
+router.post("/create", protect, createProductRequest);
+router.get("/user", protect, getUserProductRequests);
 
-// Admin-only routes
-router.get("/", protect, authorizeAdmin, getAllProductRequests);
-router.put("/:id/status", protect, authorizeAdmin, updateProductRequestStatus);
-router.put("/:id/reply", protect, authorizeAdmin, replyToProductRequest);
-router.delete("/:id", protect, authorizeAdmin, deleteProductRequest);
+// Admin routes
+router.get("/admin", protect, authorizeAdmin, getAllProductRequests);
+router.put("/reply/:id", protect, authorizeAdmin, replyToProductRequest);
 
 export default router;

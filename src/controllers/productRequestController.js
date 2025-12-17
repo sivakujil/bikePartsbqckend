@@ -3,27 +3,29 @@ import ProductRequest from "../Models/ProductRequest.js";
 // Create a new product request
 export const createProductRequest = async (req, res) => {
   try {
-    const { productName, message, userId } = req.body;
+    const { productId, productName, userMessage } = req.body;
+    const userId = req.user.id; // From JWT
 
     // Validate required fields
-    if (!productName || !message) {
+    if (!productId || !productName) {
       return res.status(400).json({
-        message: "Product name and message are required"
+        message: "Product ID and product name are required"
       });
     }
 
     // Create the request
     const productRequest = await ProductRequest.create({
+      userId,
+      productId,
       productName: productName.trim(),
-      message: message.trim(),
-      userId: userId || null, // Optional user ID
+      userMessage: userMessage ? userMessage.trim() : "",
     });
 
-    // Populate user info if userId is provided
+    // Populate user info
     await productRequest.populate('userId', 'name email');
 
     res.status(201).json({
-      message: "Product request submitted successfully",
+      message: "Request sent to admin",
       request: productRequest
     });
   } catch (err) {
@@ -75,7 +77,7 @@ export const getAllProductRequests = async (req, res) => {
 // Get product requests for the logged-in user
 export const getUserProductRequests = async (req, res) => {
   try {
-    const userId = req.user.id; // Assuming req.user is set by auth middleware
+    const userId = req.user.id;
 
     const requests = await ProductRequest.find({ userId })
       .sort({ createdAt: -1 });
@@ -126,30 +128,21 @@ export const updateProductRequestStatus = async (req, res) => {
 // Reply to product request (for admin)
 export const replyToProductRequest = async (req, res) => {
   try {
-    const { status, replyMessage } = req.body;
+    const { adminReply } = req.body;
     const { id } = req.params;
 
-    // Validate status
-    const validStatuses = ["pending", "approved", "rejected"];
-    if (!validStatuses.includes(status)) {
+    // Validate adminReply
+    if (!adminReply || adminReply.trim().length === 0) {
       return res.status(400).json({
-        message: "Invalid status. Must be one of: pending, approved, rejected"
-      });
-    }
-
-    // Validate replyMessage
-    if (!replyMessage || replyMessage.trim().length === 0) {
-      return res.status(400).json({
-        message: "Reply message is required"
+        message: "Admin reply is required"
       });
     }
 
     const request = await ProductRequest.findByIdAndUpdate(
       id,
       {
-        status,
-        replyMessage: replyMessage.trim(),
-        repliedAt: new Date()
+        status: "Replied",
+        adminReply: adminReply.trim(),
       },
       { new: true }
     ).populate('userId', 'name email');
@@ -159,7 +152,7 @@ export const replyToProductRequest = async (req, res) => {
     }
 
     res.json({
-      message: "Product request replied successfully",
+      message: "Reply sent successfully",
       request
     });
   } catch (err) {
