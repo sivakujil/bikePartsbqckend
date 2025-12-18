@@ -36,7 +36,7 @@ const server = createServer(app);
 const io = new Server(server, {
   cors: {
     origin:"https://bike-parts-frontend.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true
   }
 });
@@ -56,7 +56,7 @@ app.use(helmet({
 // CORS
 app.use(cors({
   origin:"https://bike-parts-frontend.vercel.app",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
