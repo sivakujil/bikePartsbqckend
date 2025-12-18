@@ -3,22 +3,22 @@ import ProductRequest from "../Models/ProductRequest.js";
 // Create a new product request
 export const createProductRequest = async (req, res) => {
   try {
-    const { productId, productName, userMessage } = req.body;
+    const { productId, productName, description } = req.body;
     const userId = req.user.id; // From JWT
 
     // Validate required fields
-    if (!productId || !productName) {
+    if (!productName) {
       return res.status(400).json({
-        message: "Product ID and product name are required"
+        message: "Product name is required"
       });
     }
 
     // Create the request
     const productRequest = await ProductRequest.create({
       userId,
-      productId,
+      productId: productId || null,
       productName: productName.trim(),
-      userMessage: userMessage ? userMessage.trim() : "",
+      userMessage: description ? description.trim() : "",
     });
 
     // Populate user info
