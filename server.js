@@ -101,7 +101,7 @@ app.use("/api/ads", adRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/rider", riderRoutes);
-app.use("/api/requests", productRequestRoutes);
+app.use("/api/product-requests", productRequestRoutes);
 
 // Handle socket connections
 handleConnection(io);
