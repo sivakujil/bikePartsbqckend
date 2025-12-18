@@ -12,11 +12,11 @@ const router = express.Router();
 
 // User routes
 router.post("/", protect, createProductRequest);
-router.get("/my", protect, getUserProductRequests);
+router.get("/mine", protect, getUserProductRequests);
 
 // Admin routes
-router.get("/admin", protect, authorizeAdmin, getAllProductRequests);
-router.put("/reply/:id", protect, authorizeAdmin, replyToProductRequest);
+router.get("/", protect, authorizeAdmin, getAllProductRequests);
+router.patch("/:id/reply", protect, authorizeAdmin, replyToProductRequest);
 router.delete("/:id", protect, authorizeAdmin, deleteProductRequest);
 
 export default router;

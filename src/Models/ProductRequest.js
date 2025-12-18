@@ -10,25 +10,23 @@ const productRequestSchema = new mongoose.Schema(
     productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
-      required: false,
-    },
-    productName: {
-      type: String,
       required: true,
-      trim: true,
     },
-    userMessage: {
-      type: String,
-      trim: true,
-    },
-    adminReply: {
+    messageFromUser: {
       type: String,
       trim: true,
     },
     status: {
       type: String,
-      enum: ["Pending", "Replied"],
-      default: "Pending",
+      enum: ["pending", "seen", "replied"],
+      default: "pending",
+    },
+    adminReply: {
+      type: String,
+      trim: true,
+    },
+    estimatedDate: {
+      type: Date,
     },
   },
   { timestamps: true }

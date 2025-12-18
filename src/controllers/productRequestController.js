@@ -3,22 +3,21 @@ import ProductRequest from "../Models/ProductRequest.js";
 // Create a new product request
 export const createProductRequest = async (req, res) => {
   try {
-    const { productId, productName, description } = req.body;
+    const { productId, messageFromUser } = req.body;
     const userId = req.user.id; // From JWT
 
     // Validate required fields
-    if (!productName) {
+    if (!productId) {
       return res.status(400).json({
-        message: "Product name is required"
+        message: "Product ID is required"
       });
     }
 
     // Create the request
     const productRequest = await ProductRequest.create({
       userId,
-      productId: productId || null,
-      productName: productName.trim(),
-      userMessage: description ? description.trim() : "",
+      productId,
+      messageFromUser: messageFromUser ? messageFromUser.trim() : "",
     });
 
     // Populate user info
@@ -51,6 +50,7 @@ export const getAllProductRequests = async (req, res) => {
     // Get requests with pagination
     const requests = await ProductRequest.find(filter)
       .populate('userId', 'name email')
+      .populate('productId', 'name')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
@@ -80,6 +80,7 @@ export const getUserProductRequests = async (req, res) => {
     const userId = req.user.id;
 
     const requests = await ProductRequest.find({ userId })
+      .populate('productId', 'name')
       .sort({ createdAt: -1 });
 
     res.json({
@@ -98,10 +99,10 @@ export const updateProductRequestStatus = async (req, res) => {
     const { id } = req.params;
 
     // Validate status
-    const validStatuses = ["pending", "approved", "rejected"];
+    const validStatuses = ["pending", "seen", "replied"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({
-        message: "Invalid status. Must be one of: pending, approved, rejected"
+        message: "Invalid status. Must be one of: pending, seen, replied"
       });
     }
 
@@ -128,24 +129,26 @@ export const updateProductRequestStatus = async (req, res) => {
 // Reply to product request (for admin)
 export const replyToProductRequest = async (req, res) => {
   try {
-    const { adminReply } = req.body;
+    const { adminReply, estimatedDate } = req.body;
     const { id } = req.params;
 
-    // Validate adminReply
-    if (!adminReply || adminReply.trim().length === 0) {
-      return res.status(400).json({
-        message: "Admin reply is required"
-      });
+    const updateData = {
+      status: "replied",
+    };
+
+    if (adminReply !== undefined) {
+      updateData.adminReply = adminReply.trim();
+    }
+
+    if (estimatedDate !== undefined) {
+      updateData.estimatedDate = estimatedDate ? new Date(estimatedDate) : null;
     }
 
     const request = await ProductRequest.findByIdAndUpdate(
       id,
-      {
-        status: "Replied",
-        adminReply: adminReply.trim(),
-      },
+      updateData,
       { new: true }
-    ).populate('userId', 'name email');
+    ).populate('userId', 'name email').populate('productId', 'name');
 
     if (!request) {
       return res.status(404).json({ message: "Product request not found" });
