@@ -1,15 +1,27 @@
 import ProductRequest from "../Models/ProductRequest.js";
+import mongoose from "mongoose";
 
 // Create a new product request
 export const createProductRequest = async (req, res) => {
   try {
+    console.log('POST /api/product-requests body:', req.body);
+    console.log('Authenticated user id:', req.user?.id);
+
     const { productId, messageFromUser } = req.body;
     const userId = req.user.id; // From JWT
 
     // Validate required fields
     if (!productId) {
+      console.log('Validation failed: productId is missing');
       return res.status(400).json({
         message: "Product ID is required"
+      });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      console.log('Validation failed: productId is not a valid ObjectId:', productId);
+      return res.status(400).json({
+        message: "Valid productId is required"
       });
     }
 
