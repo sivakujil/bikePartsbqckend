@@ -11,34 +11,43 @@ export const createProductRequest = async (req, res) => {
     const { productId, description } = req.body;
     const userId = req.user.id; // From JWT
 
-    // Validate required fields
-    if (!productId) {
-      console.log('Validation failed: productId is missing');
-      return res.status(400).json({
-        message: "Product ID is required"
-      });
-    }
+    // Validate and set product name
+    let finalProductName;
+    if (productId) {
+      // Existing product request
+      if (!mongoose.Types.ObjectId.isValid(productId)) {
+        console.log('Validation failed: productId is not a valid ObjectId:', productId);
+        return res.status(400).json({
+          message: "Valid productId is required"
+        });
+      }
 
-    if (!mongoose.Types.ObjectId.isValid(productId)) {
-      console.log('Validation failed: productId is not a valid ObjectId:', productId);
-      return res.status(400).json({
-        message: "Valid productId is required"
-      });
-    }
+      // Fetch product to get name
+      const product = await Product.findById(productId);
+      if (!product) {
+        return res.status(404).json({
+          message: "Product not found"
+        });
+      }
 
-    // Fetch product to get name
-    const product = await Product.findById(productId);
-    if (!product) {
-      return res.status(404).json({
-        message: "Product not found"
-      });
+      finalProductName = product.name;
+    } else {
+      // New product request
+      if (!productName || !productName.trim()) {
+        console.log('Validation failed: productName is missing or empty');
+        return res.status(400).json({
+          message: "Product name is required for new product requests"
+        });
+      }
+
+      finalProductName = productName.trim();
     }
 
     // Create the request
     const productRequest = await ProductRequest.create({
       userId,
-      productId,
-      productName: product.name,
+      productId: productId || null,
+      productName: finalProductName,
       description: description ? description.trim() : "",
     });
 
