@@ -1,4 +1,5 @@
 import ProductRequest from "../Models/ProductRequest.js";
+import Product from "../Models/Product.js";
 import mongoose from "mongoose";
 
 // Create a new product request
@@ -7,7 +8,7 @@ export const createProductRequest = async (req, res) => {
     console.log('POST /api/product-requests body:', req.body);
     console.log('Authenticated user id:', req.user?.id);
 
-    const { productId, messageFromUser } = req.body;
+    const { productId, description } = req.body;
     const userId = req.user.id; // From JWT
 
     // Validate required fields
@@ -25,11 +26,20 @@ export const createProductRequest = async (req, res) => {
       });
     }
 
+    // Fetch product to get name
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found"
+      });
+    }
+
     // Create the request
     const productRequest = await ProductRequest.create({
       userId,
       productId,
-      messageFromUser: messageFromUser ? messageFromUser.trim() : "",
+      productName: product.name,
+      description: description ? description.trim() : "",
     });
 
     // Populate user info
