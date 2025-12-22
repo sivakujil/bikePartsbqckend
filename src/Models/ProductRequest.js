@@ -12,7 +12,12 @@ const productRequestSchema = new mongoose.Schema(
       ref: "Product",
       required: true,
     },
-    messageFromUser: {
+    productName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
       type: String,
       trim: true,
     },
